@@ -4,7 +4,7 @@ import styles from "./home.module.scss";
 
 function App() {
   //   setGreetMsg(await invoke("greet", { name }));
-  const [quote, setQuote] = useState("Lorem ipsum fodase.");
+  const [quote, setQuote] = useState("Lorem ipsum.");
   const [userQuote, setUserQuote] = useState("");
   const [result, setResult] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -16,6 +16,12 @@ function App() {
   const handleType = (e: any) => {
     const word = e.target.value;
     setCurrWord(word);
+
+    if (word[word.length - 1] !== quote[userQuote.length + word.length - 1]) {
+      setErrors((prev) => prev + 1);
+    }
+
+    console.log(word[word.length - 1]);
 
     if (
       word[word.length - 1] === " " &&
@@ -66,7 +72,7 @@ function App() {
       inputRef.current.focus();
     }
 
-    console.log(userQuote.length, currWord.length, quote.length);
+    // console.log(userQuote.length, currWord.length, quote.length);
 
     if (userQuote + currWord !== quote) return;
     if (userQuote.length + currWord.length === quote.length) {
@@ -79,10 +85,6 @@ function App() {
       <h1 className={styles.title}>
         Welcome to <i>Typas</i>!
       </h1>
-
-      <p>{userQuote.length}</p>
-
-      <p> {currWord.length}</p>
 
       <div
         className="progress"
