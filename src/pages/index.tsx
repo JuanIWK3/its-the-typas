@@ -40,7 +40,8 @@ function App() {
     const precision = Math.round(
       (quote.length / (quote.length + errors)) * 100
     );
-    setResult(`errors: ${errors} precision: ${precision}%`);
+
+    setResult(`errors: ${errors} precision: ${precision || 0}%`);
   };
 
   const isCorrect = (i: number) => {
@@ -80,17 +81,18 @@ function App() {
     if (quote === "") {
       getQuote();
     }
+
     if (inputRef.current) {
       inputRef.current.focus();
     }
 
     if (userQuote + currWord !== quote) return;
+    if (quote.length === 0) return;
+
     if (userQuote.length + currWord.length === quote.length) {
       showResults();
     }
   }, [userQuote, currWord]);
-
-  const [first, setFirst] = useState("");
 
   return (
     <div className={styles.container}>
@@ -135,9 +137,7 @@ function App() {
 
       <div className="row">
         <button onClick={restartGame}>Restart</button>
-        <button>Hello</button>
       </div>
-      {first}
 
       <p>{result}</p>
     </div>
