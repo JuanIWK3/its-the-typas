@@ -3,8 +3,7 @@ import { invoke } from "@tauri-apps/api/tauri";
 import styles from "./home.module.scss";
 
 function App() {
-  //   setGreetMsg(await invoke("greet", { name }));
-  const [quote, setQuote] = useState("Lorem ipsum.");
+  const [quote, setQuote] = useState("");
   const [userQuote, setUserQuote] = useState("");
   const [result, setResult] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -46,16 +45,25 @@ function App() {
 
   const isCorrect = (i: number) => {
     if (userQuote[i] === quote[i]) {
-      return "typeSuccess";
+      return styles.typeSuccess;
     } else if (userQuote[i] === undefined) {
       if (currWord[i - userQuote.length] === quote[i]) {
-        return "typeSuccess";
+        return styles.typeSuccess;
       } else if (currWord[i - userQuote.length] === undefined) {
         return "";
       }
     }
 
-    return "typeError";
+    return styles.typeError;
+  };
+
+  const getQuote = async () => {
+    try {
+      const res = (await invoke("start")) as any;
+      setQuote(res);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const restartGame = () => {
@@ -65,14 +73,16 @@ function App() {
     setCurrWord("");
     inputRef.current.value = "";
     inputRef.current.focus();
+    getQuote();
   };
 
   useEffect(() => {
+    if (quote === "") {
+      getQuote();
+    }
     if (inputRef.current) {
       inputRef.current.focus();
     }
-
-    // console.log(userQuote.length, currWord.length, quote.length);
 
     if (userQuote + currWord !== quote) return;
     if (userQuote.length + currWord.length === quote.length) {
@@ -80,28 +90,29 @@ function App() {
     }
   }, [userQuote, currWord]);
 
+  const [first, setFirst] = useState("");
+
   return (
-    <div className="container">
+    <div className={styles.container}>
       <h1 className={styles.title}>
         Welcome to <i>Typas</i>!
       </h1>
-
       <div
-        className="progress"
+        className={styles.progress}
         style={{
           width: `${progress}%`,
           background: "#396cd8",
           height: "2px",
         }}
-      ></div>
+      />
 
-      <code>
+      <code className={styles.quote}>
         <p>
           {quote.split("").map((letter, i) => (
             <strong
               className={`
                 ${isCorrect(i)} ${
-                userQuote.length + currWord.length === i && "typeCurrent"
+                userQuote.length + currWord.length === i && styles.typeCurrent
               }
               `.trim()}
               key={i}
@@ -112,22 +123,21 @@ function App() {
         </p>
       </code>
 
-      {/* <p>{userQuote}</p> */}
-
-      <div className="row">
-        <input
-          id="greet-input"
-          onChange={(e) => handleType(e)}
-          placeholder="Type here..."
-          maxLength={quote.length}
-          autoComplete="false"
-          ref={inputRef}
-        />
-      </div>
+      <input
+        id="greet-input"
+        onChange={(e) => handleType(e)}
+        placeholder="Type here..."
+        maxLength={quote.length}
+        autoComplete="false"
+        ref={inputRef}
+        type="text"
+      />
 
       <div className="row">
         <button onClick={restartGame}>Restart</button>
+        <button>Hello</button>
       </div>
+      {first}
 
       <p>{result}</p>
     </div>

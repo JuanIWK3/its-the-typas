@@ -1121,6 +1121,7 @@ checksum = "fad582f4b9e86b6caa621cabeb0963332d92eea04729ab12892c2533951e6440"
 name = "its-the-typas"
 version = "0.0.0"
 dependencies = [
+ "rand 0.8.5",
  "serde",
  "serde_json",
  "tauri",

@@ -1,9 +1,56 @@
-.title {
-  background: #333;
-  padding: 1rem;
-  margin: 0;
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
-  i {
-    color: #396cd8;
+  width: 100%;
+  max-width: 1000px;
+  padding-top: 10vh;
+  gap: 1rem;
+
+  text-align: center;
+
+  .title {
+    background: #333;
+    padding: 1rem;
+    margin: 0;
+
+    i {
+      color: #396cd8;
+    }
+  }
+
+  .progress {
+    margin-top: -1rem;
+  }
+
+  .quote {
+    border: 1px solid #000;
+    background: #333;
+    padding: 1rem;
+    border-radius: 0.3rem;
+
+    .typeError {
+      color: red;
+      background: rgba(255, 0, 0, 0.1);
+    }
+
+    .typeSuccess {
+      color: yellowgreen;
+    }
+
+    .typeCurrent {
+      background: #444;
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .container {
+    input,
+    button {
+      color: #ffffff;
+      background-color: #0f0f0f98;
+    }
   }
 }
