@@ -1,2 +1,9 @@
-@media (prefers-color-scheme: dark) {
+.title {
+  background: #333;
+  padding: 1rem;
+  margin: 0;
+
+  i {
+    color: #396cd8;
+  }
 }

@@ -1,70 +1,109 @@
 import { useEffect, useRef, useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
+import styles from "./home.module.scss";
 
 function App() {
   //   setGreetMsg(await invoke("greet", { name }));
-  const [quote, setQuote] = useState("Lorem ipsum?");
+  const [quote, setQuote] = useState("Lorem ipsum fodase.");
   const [userQuote, setUserQuote] = useState("");
   const [result, setResult] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
-  // const [currWord, setCurrWord] = useState("");
+  const [errors, setErrors] = useState(0);
+  const [currWord, setCurrWord] = useState("");
+
+  const progress = ((userQuote.length + currWord.length) / quote.length) * 100;
 
   const handleType = (e: any) => {
-    const lastChar = e.target.value[e.target.value.length - 1];
-    if (quote[userQuote.length] === lastChar) {
-      console.log("correct");
-      setUserQuote((prev) => prev + lastChar);
-    } else {
-      console.log(e.target.value, quote[userQuote.length]);
-    }
+    const word = e.target.value;
+    setCurrWord(word);
 
-    if (lastChar === " " && quote[userQuote.length] === " ") {
+    if (
+      word[word.length - 1] === " " &&
+      quote[userQuote.length + word.length - 1] === " "
+    ) {
+      setUserQuote((prev) => prev + word);
+      setCurrWord("");
       inputRef.current.value = "";
     }
-  };
 
-  useEffect(() => {
-    if (userQuote.length === quote.length) {
-      showResults();
-    }
-  }, [userQuote]);
+    console.log(quote[userQuote.length + word.length - 1]);
+  };
 
   const showResults = () => {
     inputRef.current.value = "";
-    let errors = 0;
-    let hits = 0;
 
-    for (let i = 0; i < quote.length; i++) {
-      console.log(quote[i], userQuote[i]);
-      if (userQuote[i] === quote[i]) {
-        hits++;
-      } else {
-        errors++;
-      }
-    }
-
-    const precision = Math.round((hits / quote.length) * 100);
-    setResult(`errors: ${errors} hits: ${hits} precision: ${precision}%`);
+    const precision = Math.round(
+      (quote.length / (quote.length + errors)) * 100
+    );
+    setResult(`errors: ${errors} precision: ${precision}%`);
   };
 
   const isCorrect = (i: number) => {
     if (userQuote[i] === quote[i]) {
       return "typeSuccess";
     } else if (userQuote[i] === undefined) {
-      return "";
+      if (currWord[i - userQuote.length] === quote[i]) {
+        return "typeSuccess";
+      } else if (currWord[i - userQuote.length] === undefined) {
+        return "";
+      }
     }
+
+    return "typeError";
   };
+
+  const restartGame = () => {
+    setUserQuote("");
+    setErrors(0);
+    setResult("");
+    setCurrWord("");
+    inputRef.current.value = "";
+    inputRef.current.focus();
+  };
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+
+    console.log(userQuote.length, currWord.length, quote.length);
+
+    if (userQuote + currWord !== quote) return;
+    if (userQuote.length + currWord.length === quote.length) {
+      showResults();
+    }
+  }, [userQuote, currWord]);
 
   return (
     <div className="container">
-      <h1 className="title">
+      <h1 className={styles.title}>
         Welcome to <i>Typas</i>!
       </h1>
+
+      <p>{userQuote.length}</p>
+
+      <p> {currWord.length}</p>
+
+      <div
+        className="progress"
+        style={{
+          width: `${progress}%`,
+          background: "#396cd8",
+          height: "2px",
+        }}
+      ></div>
 
       <code>
         <p>
           {quote.split("").map((letter, i) => (
-            <strong className={isCorrect(i)} key={i}>
+            <strong
+              className={`
+                ${isCorrect(i)} ${
+                userQuote.length + currWord.length === i && "typeCurrent"
+              }
+              `.trim()}
+              key={i}
+            >
               {letter}
             </strong>
           ))}
@@ -73,20 +112,22 @@ function App() {
 
       {/* <p>{userQuote}</p> */}
 
-      <p>{result}</p>
+      <div className="row">
+        <input
+          id="greet-input"
+          onChange={(e) => handleType(e)}
+          placeholder="Type here..."
+          maxLength={quote.length}
+          autoComplete="false"
+          ref={inputRef}
+        />
+      </div>
 
       <div className="row">
-        <div>
-          <input
-            id="greet-input"
-            onChange={(e) => handleType(e)}
-            placeholder="Type here..."
-            maxLength={quote.length}
-            autoComplete="false"
-            ref={inputRef}
-          />
-        </div>
+        <button onClick={restartGame}>Restart</button>
       </div>
+
+      <p>{result}</p>
     </div>
   );
 }
