@@ -1,0 +1,6 @@
+{
+  "emmet.includeLanguages": {
+    "rust": "html"
+  },
+  "cSpell.words": ["bindgen", "curr", "tauri", "Tauri", "TAURI"]
+}

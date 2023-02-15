@@ -25,15 +25,6 @@ body {
   padding: 0;
 }
 
-body,
-#__next {
-  width: 100vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-}
-
 input,
 button {
   border-radius: 8px;
@@ -49,11 +40,63 @@ button {
   outline: none;
 }
 
-button {
-  cursor: pointer;
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
-  &:hover {
-    border-color: #396cd8;
+  width: 100%;
+  max-width: 1000px;
+  margin-top: 10vh;
+  gap: 1rem;
+  padding: 1rem;
+
+  text-align: center;
+}
+
+.title {
+  background: #333;
+  padding: 1rem;
+  margin: 0;
+}
+
+i {
+  color: #396cd8;
+}
+
+.progress {
+  margin-top: -1rem;
+}
+
+.quote {
+  border: 1px solid #000;
+  background: #333;
+  padding: 1rem;
+  border-radius: 0.3rem;
+}
+
+.typeError {
+  color: red;
+  background: rgba(255, 0, 0, 0.1);
+}
+
+.typeSuccess {
+  color: yellowgreen;
+}
+
+.typeCurrent {
+  background: #444;
+}
+
+@media (prefers-color-scheme: dark) {
+  .container {
+    display: flex;
+  }
+
+  input,
+  button {
+    color: #ffffff;
+    background-color: #0f0f0f98;
   }
 }
 
