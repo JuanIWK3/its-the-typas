@@ -2,5 +2,5 @@
   "emmet.includeLanguages": {
     "rust": "html"
   },
-  "cSpell.words": ["bindgen", "curr", "tauri", "Tauri", "TAURI"]
+  "cSpell.words": ["bindgen", "curr", "oninput", "tauri", "Tauri", "TAURI"]
 }
