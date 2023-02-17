@@ -1,6 +1,14 @@
 # Tauri + Yew
 
-This template should help get you started developing with Tauri and Yew.
+* Currently trying to code the front end using Yew based on what I did in NextJs.
+
+### Run
+`cargo tauri dev` to run the dev version
+
+### Build
+`cargo tauri build` to generate an .exe build of the project
+
+
 
 ## Recommended IDE Setup
 
