@@ -1,6 +1,10 @@
 # Tauri + Next.js + Typescript
 
-This template should help get you started developing with Tauri, Next.js and Typescript.
+### Run
+`pnpm dev` to run the dev version
+
+### Build
+`pnpm build` to generate an .exe build of the project
 
 ## Recommended IDE Setup
 
